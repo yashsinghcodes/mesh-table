@@ -8,3 +8,6 @@ typedef struct {
     int count;
     htItem** items;  
 }hashTable;
+
+hashTable* htNew();
+void delHashTable(hashTable*);

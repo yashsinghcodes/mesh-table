@@ -52,3 +52,13 @@ static int hashFunc(const char* s, const int primeNum, const int hashTableLen)
     }
     return (int)hash;
 }
+
+// index = (hash_a(string) + i * (hash_b(string) + 1)) % num_buckets
+
+static int hashFuncCol(const char* s, const int hashTableLen, const int attempt)
+{
+    const int hash_a = hashFunc(s, PRIME_NUM1, hashTableLen);
+    const int hash_b = hashFunc(s, PRIME_NUM2, hashTableLen);
+
+    return (hash_a + (attempt * (hash_b + 1))) % hashTableLen;
+}

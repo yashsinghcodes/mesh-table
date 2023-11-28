@@ -15,3 +15,6 @@ typedef struct {
 
 hashTable* htNew();
 void delHashTable(hashTable*);
+void htInsert(hashTable* ht, const char* key, const char* value);
+char* htSearch(hashTable* ht, const char* key);
+void htDelete(hashTable* ht, const char* key);

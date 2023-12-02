@@ -6,6 +6,8 @@
 
 #include "hashTable.h"
 
+static htItem HT_DELETED_ITEM = {NULL, NULL};
+
 static htItem* htNewItem(const char* k, const char* v)
 {
     htItem* newItem = malloc(sizeof(htItem));
@@ -70,8 +72,13 @@ void htInsert(hashTable *ht, const char *key, const char *value)
     htItem* item = htNewItem(key, value);
     int index = getHash(item->key, ht->size, 0);
     htItem* curItem = ht->items[index];
-    for (int i = 1; curItem != NULL; ++i)
+    for (int i = 1; curItem != NULL && curItem != &HT_DELETED_ITEM; ++i)
     {
+        if (strcmp(curItem->key, key) == 0) {
+            htDelItem(curItem);
+            ht->items[index] = item;
+            return;
+        }
         index = getHash(item->key, ht->size, i);
         curItem = ht->items[index];
     }
@@ -84,9 +91,10 @@ char* htSearch(hashTable *ht, const char* key)
     int index = getHash(key, ht->size, 0);
     htItem* item = ht->items[index];
     for (int i=1; item != NULL; ++i) {
-        if (strcmp(key, item->key) == 0 ) {
-            return item->value;
-        }
+        if (item != &HT_DELETED_ITEM)
+            if (strcmp(key, item->key) == 0 ) {
+                return item->value;
+            }
         index = getHash(key, ht->size, i);
         item = ht->items[index];
     }
@@ -94,3 +102,20 @@ char* htSearch(hashTable *ht, const char* key)
 }
 
 
+void htDelete(hashTable *ht, const char *key) 
+{
+    int index = getHash(key, ht->size, 0);
+    htItem* item = ht->items[index];
+    
+    for (int i=1; item != NULL; ++i) {
+        if (item != &HT_DELETED_ITEM) {
+            if (strcmp(key, item->key) == 0){
+                htDelItem(item); 
+                ht->items[index] = &HT_DELETED_ITEM;
+                ht->count--;
+            }
+        }
+        index = getHash(key, ht->size, i);
+        item = ht->items[index];
+    }
+}

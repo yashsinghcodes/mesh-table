@@ -1,14 +1,13 @@
-#include<stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include<math.h>
-#include <string.h>
+#include <math.h>
 
 #include "hashTable.h"
 
 static htItem HT_DELETED_ITEM = {NULL, NULL};
 
-static htItem* htNewItem(const char* k, const char* v)
+static htItem* htNewItem(char* k, char* v)
 {
     htItem* newItem = malloc(sizeof(htItem));
     newItem->key = k;

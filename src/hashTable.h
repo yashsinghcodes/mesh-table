@@ -3,7 +3,7 @@
 
 
 typedef struct {
-    char* key;
+    const char* key;
     char* value;
 }htItem;
 
@@ -15,6 +15,6 @@ typedef struct {
 
 hashTable* htNew();
 void delHashTable(hashTable*);
-void htInsert(hashTable* ht, const char* key, const char* value);
+void htInsert(hashTable* ht, const char* key, char* value);
 char* htSearch(hashTable* ht, const char* key);
 void htDelete(hashTable* ht, const char* key);

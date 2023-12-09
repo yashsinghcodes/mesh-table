@@ -7,7 +7,7 @@
 
 static htItem HT_DELETED_ITEM = {NULL, NULL};
 
-static htItem* htNewItem(char* k, char* v)
+static htItem* htNewItem(const char* k, char* v)
 {
     htItem* newItem = malloc(sizeof(htItem));
     newItem->key = k;
@@ -27,7 +27,7 @@ hashTable* htNew()
 
 static void htDelItem(htItem* i)
 {
-    free(i->key);
+    free((void *)i->key);
     free(i->value);
     free(i);
 }
@@ -66,7 +66,7 @@ static int getHash(const char* s, const int hashTableLen, const int attempt)
 }
 
 
-void htInsert(hashTable *ht, const char *key, const char *value)
+void htInsert(hashTable *ht, const char *key, char *value)
 {
     htItem* item = htNewItem(key, value);
     int index = getHash(item->key, ht->size, 0);
@@ -91,7 +91,8 @@ char* htSearch(hashTable *ht, const char* key)
     htItem* item = ht->items[index];
     for (int i=1; item != NULL; ++i) {
         if (item != &HT_DELETED_ITEM)
-            if (strcmp(key, item->key) == 0 ) {
+            if (*key == *item->key && 
+                !strcmp(key, item->key)) {
                 return item->value;
             }
         index = getHash(key, ht->size, i);

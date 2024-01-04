@@ -59,7 +59,7 @@ void htInsert(hashTable *ht, char *key, char *value) {
   htItem *item = htNewItem(key, value);
   int index = getHash(item->key, ht->size, 0);
   htItem *curItem = ht->items[index];
-  for (int i = 1; curItem != NULL && curItem != &HT_DELETED_ITEM; ++i) {
+  for (int i = 1; curItem != NULL || curItem != &HT_DELETED_ITEM; ++i) {
     if (strcmp(curItem->key, key) == 0) {
       htDelItem(curItem);
       ht->items[index] = item;
